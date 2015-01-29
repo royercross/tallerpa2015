@@ -6,10 +6,12 @@
 
 package buscaminas;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 /**
  *
  * @author rogelio_noris
@@ -23,26 +25,147 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     JButton botones[][];
     int columnas;
     int filas;
-    
+    int tablero[][];
+    int numeroBombas;
+    boolean juegoTerminado;
+    /**
+     * Constructor
+     */
     public Ventana() {
-        initComponents();
         
-        botones = new JButton[5][5];
-        columnas = 5;
-        filas = 5;
-        for(int i=0; i < columnas; i++){
-            for(int j=0; j < filas; j++){
+        // Inicializa la interfaz grafica
+        initComponents();       
+        
+        //Inicia el juego
+        iniciaJuego();
+    }
+    
+    private void iniciaJuego(){
+        //Configuracion Inicial
+        juegoTerminado = false;
+        columnas = 10;
+        filas = 10;                      
+        numeroBombas = 20;        
+        //Crea y coloca los botones en el panel
+        creaTablero();
+        
+        //Crea la matriz de numeros y coloca bombas aleatorias
+        colocaBombas();
+    }
+    
+    private void reiniciaJuego(){
+        for(int i=0; i < filas; i++){
+            for(int j=0; j < columnas; j++){
+                panelCuadros.remove(botones[i][j]);
+            }
+        }
+        panelCuadros.revalidate();
+        panelCuadros.repaint();
+        
+        iniciaJuego();
+        
+    }
+        
+    /**
+     * Crea y coloca los botones en el panel
+     */
+    private void creaTablero(){
+        botones = new JButton[filas][columnas];        
+        
+        for(int i=0; i < filas; i++){
+            for(int j=0; j < columnas; j++){
                 botones[i][j] = new JButton("");
-                botones[i][j].setBounds(j*70, i*60, 50, 50);
+                botones[i][j].setBounds(j*60, i*60, 60, 60);
                 panelCuadros.add(botones[i][j]);
-                botones[i][j].addActionListener(this);    
+                botones[i][j].addActionListener(this);
             }            
+        }  
+    }
+
+    /**
+     * Crea la matriz de numeros y coloca bombas aleatorias
+     */
+    private void colocaBombas(){
+        
+        tablero = new int[filas][columnas];
+            
+        int fila, columna;
+        for(int i=0; i < numeroBombas; i++){
+            fila = (int) (Math.random() * filas);
+            columna = (int) (Math.random() * columnas);
+            
+            if(tablero[fila][columna]==1){
+                i--;
+            }else{
+                tablero[fila][columna]=1;
+            }
         }
         
     }
     
+    private void muestraBombas(){
+        
+        juegoTerminado = true;
+        for(int i=0; i < filas; i++){
+            for(int j=0; j < columnas; j++){
+                if(tablero[i][j] == 1){
+                    botones[i][j].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/bomba.jpg"))
+                        .getImage().getScaledInstance(50,50,java.awt.Image.SCALE_SMOOTH)
+                    ));
+                }
+                
+                
+            }            
+        } 
+                
+    }
     
-
+    private void cuentaBombas(int fila, int columna){
+        int bombasEncontradas=0;
+        
+        bombasEncontradas+=revisaBombas(fila-1, columna-1);
+        bombasEncontradas+=revisaBombas(fila-1, columna);
+        bombasEncontradas+=revisaBombas(fila-1, columna+1);
+        bombasEncontradas+=revisaBombas(fila, columna-1);
+        bombasEncontradas+=revisaBombas(fila, columna+1);
+        bombasEncontradas+=revisaBombas(fila+1, columna-1);
+        bombasEncontradas+=revisaBombas(fila+1, columna);
+        bombasEncontradas+=revisaBombas(fila+1, columna+1);
+        
+        botones[fila][columna].setText(""+bombasEncontradas);
+        
+        if(bombasEncontradas == 0){
+            clicks(fila-1, columna-1);
+            clicks(fila-1, columna);
+            clicks(fila-1, columna+1);
+            clicks(fila, columna-1);
+            clicks(fila, columna+1);
+            clicks(fila+1, columna-1);
+            clicks(fila+1, columna);
+            clicks(fila+1, columna+1);
+        }
+        
+    }
+    
+    private int revisaBombas(int fila, int columna){
+        if( fila >= 0 && columna >=0 && fila < filas && columna < columnas){
+            if(tablero[fila][columna] == 1){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        return 0;
+    }
+    
+    private void clicks(int fila, int columna){
+        if( fila >= 0 && columna >=0 && fila < filas && columna < columnas){
+            if(tablero[fila][columna] == 0){
+                botones[fila][columna].doClick();
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,16 +190,22 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/happyface.png"))
                 .getImage().getScaledInstance(50,50,java.awt.Image.SCALE_SMOOTH)
             ));
+            jButton1.setName(""); // NOI18N
+            jButton1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
 
             javax.swing.GroupLayout panelCuadrosLayout = new javax.swing.GroupLayout(panelCuadros);
             panelCuadros.setLayout(panelCuadrosLayout);
             panelCuadrosLayout.setHorizontalGroup(
                 panelCuadrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 336, Short.MAX_VALUE)
+                .addGap(0, 644, Short.MAX_VALUE)
             );
             panelCuadrosLayout.setVerticalGroup(
                 panelCuadrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 388, Short.MAX_VALUE)
+                .addGap(0, 471, Short.MAX_VALUE)
             );
 
             txtTiempo.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
@@ -88,7 +217,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
+                    .addGap(14, 14, 14)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(panelCuadros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
@@ -97,7 +226,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(txtTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(304, Short.MAX_VALUE))
+                    .addContainerGap(17, Short.MAX_VALUE))
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,13 +236,18 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                         .addComponent(txtBombas)
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(panelCuadros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(437, Short.MAX_VALUE))
+                    .addGap(18, 18, 18)
+                    .addComponent(panelCuadros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap())
             );
 
             pack();
         }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        reiniciaJuego();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -159,7 +293,35 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if(juegoTerminado){
+            return;
+        }
+        
         JButton btn = (JButton) e.getSource();
-        btn.setText("x");
+        btn.setBackground(Color.white);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);        
+        
+        int fila=0;
+        int columna=0;
+        
+        for(int i=0; i < filas; i++){
+            for(int j=0; j < columnas; j++){
+                if(btn == botones[i][j]){
+                    fila=i;
+                    columna=j;
+                }                
+            }            
+        }  
+        
+        //JOptionPane.showMessageDialog(null, ""+fila+" "+columna);
+        if(tablero[fila][columna] == 1){
+            muestraBombas();
+        }else{
+            tablero[fila][columna] = 2;
+            cuentaBombas(fila,columna);
+        }
+        
     }
 }
