@@ -9,6 +9,8 @@ package buscaminas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -16,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author rogelio_noris
  */
-public class Ventana extends javax.swing.JFrame implements ActionListener{
+public class Ventana extends javax.swing.JFrame implements ActionListener, Runnable{
 
     /**
      * Creates new form Ventana
@@ -28,6 +30,11 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     int tablero[][];
     int numeroBombas;
     boolean juegoTerminado;
+    
+    Thread timer;
+    float tiempo;
+    
+    
     /**
      * Constructor
      */
@@ -37,7 +44,11 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         initComponents();       
         
         //Inicia el juego
-        iniciaJuego();
+        iniciaJuego();       
+        
+        tiempo=0;
+        timer = new Thread(this);
+        timer.start();
     }
     
     private void iniciaJuego(){
@@ -321,7 +332,24 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         }else{
             tablero[fila][columna] = 2;
             cuentaBombas(fila,columna);
-        }
-        
+        }        
     }
+
+    @Override
+    public void run() {
+        while(true){
+            tiempo++;
+            
+            int minutos = (int)(tiempo / 60f);
+            int segundos = (int)(tiempo % 60f);
+            
+            txtTiempo.setText(""+minutos+":"+segundos);  
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                
+            }
+        }        
+    }
+    
 }
