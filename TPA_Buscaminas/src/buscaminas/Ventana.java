@@ -54,9 +54,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener, Runna
     private void iniciaJuego(){
         //Configuracion Inicial
         juegoTerminado = false;
-        columnas = 10;
-        filas = 10;                      
-        numeroBombas = 20;        
+        columnas = 5;
+        filas = 5;                      
+        numeroBombas = 5;        
         //Crea y coloca los botones en el panel
         creaTablero();
         
@@ -216,7 +216,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener, Runna
             );
             panelCuadrosLayout.setVerticalGroup(
                 panelCuadrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 471, Short.MAX_VALUE)
+                .addGap(0, 453, Short.MAX_VALUE)
             );
 
             txtTiempo.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
@@ -248,8 +248,8 @@ public class Ventana extends javax.swing.JFrame implements ActionListener, Runna
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
                     .addGap(18, 18, 18)
-                    .addComponent(panelCuadros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap())
+                    .addComponent(panelCuadros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(24, Short.MAX_VALUE))
             );
 
             pack();
