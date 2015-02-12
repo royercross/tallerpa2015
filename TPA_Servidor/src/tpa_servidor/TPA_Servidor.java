@@ -16,7 +16,8 @@ public class TPA_Servidor {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Servidor servidor = new Servidor();
+        servidor.conexion(5555);
     }
     
 }
