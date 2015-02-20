@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author rogelio_noris
  */
-public class Servidor {
+public class Servidor implements AvisaServidor{
     
     private ServerSocket serverSocket;    
     
@@ -41,7 +41,9 @@ public class Servidor {
             while(true){
                 Socket socket = serverSocket.accept();
                 System.out.println("Un usuario se ha conectado");
-                clientes.add(new ClienteThread(socket));
+                ClienteThread cliente = new ClienteThread(socket);
+                cliente.addListener(this);
+                clientes.add(cliente);
             }
             
             
@@ -49,9 +51,7 @@ public class Servidor {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }
- 
-    
+    }    
     
     public void cerrarConexion(){
         try{
@@ -59,6 +59,11 @@ public class Servidor {
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onClientReceive() {
+        System.out.println("Llego un mensaje al cliente.");
     }
     
 }

@@ -17,7 +17,7 @@ import java.net.Socket;
  *
  * @author rogelio_noris
  */
-public class ClienteThread {
+public class ClienteThread{
     
     private Socket socket;
     
@@ -30,9 +30,11 @@ public class ClienteThread {
     
     private boolean conexionActiva;
     
+    public AvisaServidor avisaServidor;
+    
     public ClienteThread(Socket socket){
-        this.socket=socket;
-        
+        this.socket=socket;        
+                
         conexionActiva=true;
         Thread hiloServer = new Thread(new Runnable() {
             @Override
@@ -46,17 +48,25 @@ public class ClienteThread {
         hiloServer.start();   
     }
     
+    public void addListener(AvisaServidor avisaServidor){
+        this.avisaServidor = avisaServidor;      
+    }
+    
     public void recibirDatos(){
         try{
             inputStream = socket.getInputStream();
             entradaDatos = new DataInputStream(inputStream);
+            
+            if(this.avisaServidor != null){
+                this.avisaServidor.onClientReceive();    
+            }            
             
             System.out.println(entradaDatos.readUTF());
         }catch(Exception ex){
             //ex.printStackTrace();
             conexionActiva=false;
         }
-    }
+    }    
     
     public void enviarDatos(String datos){
         try{
@@ -78,6 +88,6 @@ public class ClienteThread {
             ex.printStackTrace();
         }
     }
-    
+   
     
 }
