@@ -57,8 +57,19 @@ public class ClienteThread{
             inputStream = socket.getInputStream();
             entradaDatos = new DataInputStream(inputStream);
             
+            String msg = entradaDatos.readUTF();
+            /*
+            String arreglo[] = new String[10];
+            arreglo = msg.split("|");
+            
+            msg$hola
+            pvt|jose|
+            nickname|rogelio
+            casilla|1
+            ganador|2
+            */        
             if(this.avisaServidor != null){
-                this.avisaServidor.onClientReceive();    
+                this.avisaServidor.onClientReceive(msg);    
             }            
             
             System.out.println(entradaDatos.readUTF());

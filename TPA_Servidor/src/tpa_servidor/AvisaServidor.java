@@ -14,6 +14,6 @@ import java.util.EventListener;
  */
 interface AvisaServidor extends EventListener{
    
-   public void onClientReceive();
+   public void onClientReceive(String msg);
     
 }

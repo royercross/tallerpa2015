@@ -41,6 +41,7 @@ public class Servidor implements AvisaServidor{
             while(true){
                 Socket socket = serverSocket.accept();
                 System.out.println("Un usuario se ha conectado");
+                
                 ClienteThread cliente = new ClienteThread(socket);
                 cliente.addListener(this);
                 clientes.add(cliente);
@@ -62,8 +63,8 @@ public class Servidor implements AvisaServidor{
     }
 
     @Override
-    public void onClientReceive() {
-        System.out.println("Llego un mensaje al cliente.");
+    public void onClientReceive(String msg) {
+        System.out.println("Llego un mensaje al cliente." + msg);
     }
     
 }
