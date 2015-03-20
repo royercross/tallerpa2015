@@ -52,7 +52,7 @@ public class Cliente extends javax.swing.JFrame {
             inputStream = socket.getInputStream();
             entradaDatos = new DataInputStream(inputStream);
             System.out.println(entradaDatos.readUTF());
-        } catch (IOException ex) {
+        } catch (IOException ex) {            
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }                
     }
@@ -62,7 +62,7 @@ public class Cliente extends javax.swing.JFrame {
             outputStream = socket.getOutputStream();
             salidaDatos = new DataOutputStream(outputStream);
             
-            salidaDatos.writeUTF("Mensaje de prueba");
+            salidaDatos.writeUTF(txtMensaje.getText());
             salidaDatos.flush();
             
         } catch (IOException ex) {

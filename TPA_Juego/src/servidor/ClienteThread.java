@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package tpa_servidor;
+package servidor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import tpa_juego.Player;
 
 /**
  *
@@ -21,9 +22,10 @@ public class ClienteThread{
     
     private Socket socket;
     
+    public int ID;
     public String nombre;   
+    public Player player;
     
-        
     private OutputStream outputStream;
     private InputStream inputStream;
     
@@ -32,7 +34,7 @@ public class ClienteThread{
     
     private boolean conexionActiva;
     
-    public AvisaServidor avisaServidor;
+    public MessageListener messageListener;
     
     public ClienteThread(Socket socket){
         this.socket=socket;        
@@ -50,8 +52,8 @@ public class ClienteThread{
         hiloServer.start();   
     }
     
-    public void addListener(AvisaServidor avisaServidor){
-        this.avisaServidor = avisaServidor;      
+    public void addListener(MessageListener messageListener){
+        this.messageListener = messageListener;      
     }
     
     public void recibirDatos(){
@@ -71,11 +73,10 @@ public class ClienteThread{
             ganador|2
             */ 
             
-            if(this.avisaServidor != null){
-                this.avisaServidor.onClientReceive(msg);    
+            if(this.messageListener != null){
+                this.messageListener.onClientReceiveMessage(ClienteThread.this, msg);    
             }            
-            
-            System.out.println(entradaDatos.readUTF());
+                        
         }catch(Exception ex){
             //ex.printStackTrace();
             conexionActiva=false;

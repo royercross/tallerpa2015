@@ -31,7 +31,7 @@ public class Servidor implements AvisaServidor{
         
     }
     
-    void conexion(int puerto){
+    public void conexion(int puerto){
         try {
             
             clientes = new Vector<ClienteThread>();
@@ -65,6 +65,16 @@ public class Servidor implements AvisaServidor{
     @Override
     public void onClientReceive(String msg) {
         System.out.println("Llego un mensaje al cliente." + msg);
+    }
+
+    @Override
+    public void onClientReceivePvt(String nickname, String msg) {
+        for(int i=0; i < clientes.size(); i++){
+            ClienteThread cliente = clientes.get(i);
+            if(cliente.nombre == nickname){
+                cliente.enviarDatos(msg);
+            }
+        }
     }
     
 }

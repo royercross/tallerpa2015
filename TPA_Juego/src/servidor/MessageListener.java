@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tpa_servidor;
+package servidor;
 
 import java.util.EventListener;
 
@@ -12,10 +12,10 @@ import java.util.EventListener;
  *
  * @author rogelionoris
  */
-interface AvisaServidor extends EventListener{
+public interface MessageListener extends EventListener{
    
-   public void onClientReceive(String msg);
-   public void onClientReceivePvt(String nickname, String msg);
+   public void onClientReceiveMessage(ClienteThread evt, String msg);
+   public void onClientReceivePvtMessage(String nickname, String msg);
    
    
 }

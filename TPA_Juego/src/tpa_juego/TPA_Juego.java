@@ -3,22 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package tpa_cliente;
+package tpa_juego;
 
 /**
  *
- * @author rogelio_noris
+ * @author rogelionoris
  */
-public class TPA_Cliente {
+public class TPA_Juego {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Cliente cliente = new Cliente();
-        cliente.setVisible(true);
-        cliente.conexion(7777,"localhost");
+        // TODO code application logic here
+        new GameWindow().setVisible(true);
     }
     
 }
