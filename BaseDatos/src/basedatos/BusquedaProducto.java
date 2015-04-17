@@ -20,16 +20,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author rogelionoris
  */
-public class Busqueda extends javax.swing.JFrame {
+public class BusquedaProducto extends javax.swing.JFrame {
 
     Conexion conexion;
     Connection cn;
     JTextField txtID;
-    Ventana ventana;
+    Ventas ventas;
     /**
      * Creates new form Busqueda
      */
-    public Busqueda() {
+    public BusquedaProducto() {
         initComponents();
         
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -40,7 +40,7 @@ public class Busqueda extends javax.swing.JFrame {
         
     }
 
-    public Busqueda(Ventana ventana, JTextField txtID) {
+    public BusquedaProducto(Ventas ventas, JTextField txtID) {
         initComponents();
         
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -50,15 +50,15 @@ public class Busqueda extends javax.swing.JFrame {
         actualizar(null);
         
         this.txtID = txtID;
-        this.ventana = ventana;       
+        this.ventas = ventas;       
         
     }
     
     private void actualizar(String condicion){
         DefaultTableModel model = new DefaultTableModel();                                
         model.addColumn("id");
-        model.addColumn("nombre");
-        model.addColumn("telefono");
+        model.addColumn("producto");
+        model.addColumn("precio");
         
         String[] datos;            
         
@@ -69,11 +69,11 @@ public class Busqueda extends javax.swing.JFrame {
             ResultSet rs;
                         
             if(condicion == null || condicion.isEmpty()){
-                sql="SELECT * FROM empleados WHERE fecha_eliminado IS NULL";    
+                sql="SELECT * FROM productos WHERE fecha_eliminado IS NULL";    
                 consulta =  cn.prepareStatement(sql); 
                 rs = consulta.executeQuery();
             }else{
-                sql="SELECT * FROM empleados WHERE fecha_eliminado IS NULL AND nombre LIKE ?";   
+                sql="SELECT * FROM productos WHERE fecha_eliminado IS NULL AND producto LIKE ?";   
                 consulta =  cn.prepareStatement(sql); 
                 consulta.setString(1, "%"+condicion+"%");
                 rs = consulta.executeQuery();
@@ -83,8 +83,8 @@ public class Busqueda extends javax.swing.JFrame {
             while(rs.next()){
                 datos = new String[3];
                 datos[0] = rs.getString("id");
-                datos[1] = rs.getString("nombre");
-                datos[2] = rs.getString("telefono");
+                datos[1] = rs.getString("producto");
+                datos[2] = rs.getString("precio");
                 model.addRow(datos);
             }
         }catch(Exception ex){
@@ -205,9 +205,9 @@ public class Busqueda extends javax.swing.JFrame {
         
         txtID.setText(""+id);
         
-        ventana.buscarId();  
+        //ventana.buscarId();  
         
-        Busqueda.this.dispose();
+        BusquedaProducto.this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -227,20 +227,21 @@ public class Busqueda extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Busqueda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusquedaProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Busqueda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusquedaProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Busqueda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusquedaProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Busqueda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusquedaProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Busqueda().setVisible(true);
+                new BusquedaProducto().setVisible(true);
             }
         });
     }
