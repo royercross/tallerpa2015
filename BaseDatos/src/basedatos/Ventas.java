@@ -319,12 +319,58 @@ public class Ventas extends javax.swing.JInternalFrame {
             consulta.setString(2,monto_total);
             consulta.setString(3,fecha);            
             
-            consulta.executeUpdate();
-            
+            consulta.executeUpdate();            
+        }catch(Exception ex){                                   
+            ex.printStackTrace();
+            return;
+        }
+        
+        sql="SELECT LAST_INSERT_ID() as id FROM ventas";
+        
+        String id = null;
+        
+        try{
+            Statement consulta =  cn.createStatement();
+            ResultSet rs = consulta.executeQuery(sql);            
+            if(rs.next()){
+                id = rs.getString("id");
+            }else{
+                JOptionPane.showMessageDialog(null, "Error");
+            }
         }catch(Exception ex){
             ex.printStackTrace();
         }
+        
+        
        
+        for(int i = 0; i < model.getRowCount(); i++){
+            sql="INSERT INTO ventas_detalle (id_ventas,id_producto,precio,cantidad,total) VALUES(?,?,?,?,?)";    
+            
+            String id_venta=id;
+            String id_producto=model.getValueAt(i, 0).toString();
+            String precio=model.getValueAt(i, 2).toString();
+            String cantidad=model.getValueAt(i, 3).toString();
+            String total=model.getValueAt(i, 4).toString();
+            
+             try{
+                 
+                PreparedStatement consulta = cn.prepareStatement(sql);
+                consulta.setString(1,id_venta);
+                consulta.setString(2,id_producto);
+                consulta.setString(3,precio);            
+                consulta.setString(4,cantidad);            
+                consulta.setString(5,total);            
+
+                consulta.execute();   
+                
+            }catch(Exception ex){                                   
+                ex.printStackTrace();                
+            }
+            
+        }
+        
+        JOptionPane.showMessageDialog(null, "Se guardo correctamente la venta");
+        
         
     }//GEN-LAST:event_btnGuardarActionPerformed
 
